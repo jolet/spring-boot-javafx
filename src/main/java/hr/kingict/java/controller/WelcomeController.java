@@ -1,32 +1,28 @@
 package hr.kingict.java.controller;
 
-import hr.kingict.java.service.GreetingService;
+import hr.kingict.java.controller.Navigation;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-
 @Component
-public class WelcomeController implements Initializable{
+public class WelcomeController {
 
-    @FXML public Button welcomeButton;
+    @FXML
+    public Button counterButton;
+    private int counter;
 
     @Autowired
-    private GreetingService greetingService;
+    private Navigation navigation;
 
+    @FXML
+    public void showUserView() {
+        navigation.showUserView();
+    }
 
     public String getWelcomeMessage() {
-        System.out.println("=============[ getWelcomeMessage:" + this.toString() + "=============");
-        return greetingService.getWelcomeGreeting();
-    }
-
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("=============[ initialize:       " + this.toString() + "=============");
-        welcomeButton.setText(greetingService.getWelcomeGreeting());
+        return "Hello Spring Boot";
     }
 }
+

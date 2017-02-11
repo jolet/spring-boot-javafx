@@ -1,0 +1,9 @@
+/* App global css properties class */
+.root {
+    -fx-background-color: #FAFAFA;
+    -fx-font-family: "Arial", sans serif;
+}
+
+.label {
+    -fx-font-size: 12pt;
+}

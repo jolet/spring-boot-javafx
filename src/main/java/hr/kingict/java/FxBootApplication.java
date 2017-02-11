@@ -1,5 +1,6 @@
 package hr.kingict.java;
 
+import hr.kingict.java.controller.Navigation;
 import hr.kingict.java.controller.WelcomeController;
 import hr.kingict.java.service.GreetingService;
 import javafx.application.Application;
@@ -12,41 +13,47 @@ import javafx.stage.Stage;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import java.io.IOException;
 
+/**
+ * App lifecycle: main() -> init() -> start() *Fx GUI Thread* -> stop()
+ * Spring boot apps take program arguments so in main() they are saved to savedArgs to be picked later
+ * from init() call where spring context starts up. start() method is called afterwards from gui thread.
+ */
 @SpringBootApplication
+@EnableJpaRepositories(basePackages = "hr.kingict.java.repository")
 public class FxBootApplication extends Application {
 
+    private static String[] savedArgs;
+    private ConfigurableApplicationContext applicationContext;
+
     @Autowired
-    private WelcomeController welcomeController;
+    private Navigation navigation;
 
     public static void main(String[] args) {
-        Application.launch();
+        savedArgs = args;
+        Application.launch(args);
     }
 
     @Override
     public void init() {
-        SpringApplication.run(getClass()).getAutowireCapableBeanFactory().autowireBean(this);
+        applicationContext = SpringApplication.run(getClass(), savedArgs);
+        applicationContext.getAutowireCapableBeanFactory().autowireBean(this);
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
-        System.out.print(welcomeController.getWelcomeMessage() + "\n");
-//        Parent welcomePane = FXMLLoader.load(getClass().getResource("/welcome.fxml"));
-        Parent welcomePane = loadFxml("/welcome.fxml");
-        primaryStage.setScene(new Scene(welcomePane));
-        primaryStage.show();
+    public void start(Stage stage) {
+        navigation.setStage(stage);
+        navigation.showWelcomeView();
     }
 
-    private Parent loadFxml(String view) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(view));
-        loader.setControllerFactory(param -> welcomeController);
-        try {
-            loader.load();
-        } catch (IOException ex) {
-            System.out.println("IOException while loading resource");
-        }
-        return loader.getRoot();
+    @Override
+    public void stop() throws Exception {
+        super.stop();
+        applicationContext.close();
+        System.exit(0);
     }
 }
