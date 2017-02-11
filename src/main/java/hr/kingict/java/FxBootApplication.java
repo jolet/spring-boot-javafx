@@ -1,7 +1,10 @@
 package hr.kingict.java;
 
+import hr.kingict.java.controller.WelcomeController;
 import hr.kingict.java.service.GreetingService;
 import javafx.application.Application;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Pane;
@@ -14,7 +17,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class FxBootApplication extends Application {
 
     @Autowired
-    private GreetingService greetingService;
+    private WelcomeController welcomeController;
 
     public static void main(String[] args) {
         Application.launch();
@@ -27,8 +30,9 @@ public class FxBootApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Pane helloFxPane = new Pane(new Button(greetingService.getWelcomeGreeting()));
-        primaryStage.setScene(new Scene(helloFxPane));
+        System.out.print(welcomeController.getWelcomeMessage());
+        Parent welcomePane = FXMLLoader.load(getClass().getResource("/welcome.fxml"));
+        primaryStage.setScene(new Scene(welcomePane));
         primaryStage.show();
     }
 }
