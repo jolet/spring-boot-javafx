@@ -13,6 +13,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.io.IOException;
+
 @SpringBootApplication
 public class FxBootApplication extends Application {
 
@@ -30,9 +32,21 @@ public class FxBootApplication extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        System.out.print(welcomeController.getWelcomeMessage());
-        Parent welcomePane = FXMLLoader.load(getClass().getResource("/welcome.fxml"));
+        System.out.print(welcomeController.getWelcomeMessage() + "\n");
+//        Parent welcomePane = FXMLLoader.load(getClass().getResource("/welcome.fxml"));
+        Parent welcomePane = loadFxml("/welcome.fxml");
         primaryStage.setScene(new Scene(welcomePane));
         primaryStage.show();
+    }
+
+    private Parent loadFxml(String view) {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource(view));
+        loader.setControllerFactory(param -> welcomeController);
+        try {
+            loader.load();
+        } catch (IOException ex) {
+            System.out.println("IOException while loading resource");
+        }
+        return loader.getRoot();
     }
 }
