@@ -11,22 +11,21 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 @Component
-public class WelcomeController implements Initializable{
+public class WelcomeController implements Initializable {
 
-    @FXML public Button welcomeButton;
+    @FXML
+    public Button welcomeButton;
 
     @Autowired
     private GreetingService greetingService;
 
 
     public String getWelcomeMessage() {
-        System.out.println("=============[ getWelcomeMessage:" + this.toString() + "=============");
         return greetingService.getWelcomeGreeting();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        System.out.println("=============[ initialize:       " + this.toString() + "=============");
         welcomeButton.setText(greetingService.getWelcomeGreeting());
     }
 }
