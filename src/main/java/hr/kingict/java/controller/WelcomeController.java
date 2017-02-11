@@ -20,12 +20,13 @@ public class WelcomeController implements Initializable{
 
 
     public String getWelcomeMessage() {
-//        return welcomeButton.getText();
+        System.out.println("=============[ getWelcomeMessage:" + this.toString() + "=============");
         return greetingService.getWelcomeGreeting();
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        System.out.println("=============[ initialize:       " + this.toString() + "=============");
         welcomeButton.setText(greetingService.getWelcomeGreeting());
     }
 }
